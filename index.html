@@ -3,103 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Horizon | Next-Gen AI Ideas</title>
+    <title>AI Horizon | Exploring the Future</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f7f6;
             color: #333;
+            line-height: 1.6;
         }
         header {
             background-color: #1a2a6c;
             color: white;
-            padding: 20px;
+            padding: 40px 20px;
             text-align: center;
         }
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { margin: 10px 0 0 0; font-size: 1.1rem; opacity: 0.9; }
         .container {
-            max-width: 1100px;
-            margin: 20px auto;
-            padding: 20px;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
-        .adsense-placeholder {
-            background-color: #e0e0e0;
-            border: 2px dashed #999;
-            color: #666;
-            text-align: center;
-            padding: 20px;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-        .idea-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
         }
-        .idea-card {
+        .card {
             background: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .idea-card h3 a {
-            color: #1a2a6c;
-            text-decoration: none;
+        .card:hover {
+            transform: translateY(-5px);
         }
-        .idea-card h3 a:hover {
-            text-decoration: underline;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #222;
+        .card h2 { color: #1a2a6c; margin-top: 0; font-size: 1.4rem; }
+        .card p { color: #666; font-size: 0.95rem; margin-bottom: 20px; }
+        .btn {
+            display: inline-block;
+            background-color: #b21f1f;
             color: white;
-            margin-top: 40px;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
         }
+        .btn:hover { background-color: #8c1818; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>AI Horizon</h1>
-        <p>Exploring the Newest Innovations & Ideas in Artificial Intelligence</p>
+        <p>Analyzing the profound impacts of Artificial Intelligence on society, truth, and humanity.</p>
     </header>
 
     <div class="container">
-        <!-- TOP ADVERTISEMENT PLACEHOLDER -->
-        <div class="adsense-placeholder">
-            [Google AdSense Banner Advertisement Area]
-        </div>
-
-        <h2>Latest AI Concepts & Innovations</h2>
-        
-        <div class="idea-grid">
-            <div class="idea-card">
-                <h3><a href="healthcare.html">1. AI Eco-Architects & Healthcare</a></h3>
-                <p>How AI is stepping up as the silent healer in medicine. Click to read the full article about saving lives via medical technology.</p>
-            </div>
+        <div class="grid">
             
-            <div class="idea-card">
-                <h3><a href="deepfakes.html">2. Bio-Synthesis & The Deepfake Dilemma</a></h3>
-                <p>Can we trust our own eyes? Click to read the full article exploring how deepfakes work and the risks they pose to truth.</p>
+            <!-- Card 1: Healthcare -->
+            <div class="card">
+                <div>
+                    <h2>AI in Healthcare</h2>
+                    <p>Discover how machine learning is assisting doctors, cutting administrative red tape, and saving lives without losing the human touch.</p>
+                </div>
+                <a href="healthcare.html" class="btn">Read Article</a>
             </div>
 
-            <div class="idea-card">
-                <h3><a href="jobs.html">3. AI Learning Tutors & The Future of Work</a></h3>
-                <p>Will AI steal your career? Click to read the full article about how the job market is shifting and how humans can adapt.</p>
+            <!-- Card 2: Deepfakes -->
+            <div class="card">
+                <div>
+                    <h2>The Reality of Deepfakes</h2>
+                    <p>Explore the mechanics behind synthetic media, its double-edged potential in entertainment, and how to spot digital deception.</p>
+                </div>
+                <a href="deepfakes.html" class="btn">Read Article</a>
             </div>
-        </div>
 
-        <!-- BOTTOM ADVERTISEMENT PLACEHOLDER -->
-        <div class="adsense-placeholder">
-            [Google AdSense Responsive Advertisement Area]
+            <!-- Card 3: Future of Jobs -->
+            <div class="card">
+                <div>
+                    <h2>The Future of Work</h2>
+                    <p>Will AI take over your profession or empower it? Learn why adaptability and human-AI collaboration are the keys to thriving.</p>
+                </div>
+                <a href="jobs.html" class="btn">Read Article</a>
+            </div>
+
         </div>
     </div>
-
-    <footer>
-        <p>&copy; 2026 AI Horizon. Built for the future.</p>
-    </footer>
 
 </body>
 </html>
