@@ -1,180 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Horizon | Exploring the Future</title>
-    
-    <!-- AdSense Code Snippet -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3896188020445646" crossorigin="anonymous"></script>
-    
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f7f6;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        /* Header Container with relative positioning for canvas */
-        header {
-            position: relative;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            overflow: hidden;
-        }
-        
-        /* Canvas layer for the AI particle effect */
-        #ai-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-        
-        /* Keeping header text above the canvas effect */
-        header h1, header p {
-            position: relative;
-            z-index: 2;
-        }
-        header h1 { margin: 0; font-size: 2.8rem; letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        header p { margin: 10px 0 0 0; font-size: 1.3rem; opacity: 0.9; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
-        
-        /* Navigation Bar Styles */
-        nav {
-            background-color: #111e38;
-            text-align: center;
-            padding: 12px 0;
-            position: relative;
-            z-index: 3;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        nav a {
-            color: #e0e6ed;
-            text-decoration: none;
-            padding: 8px 18px;
-            font-weight: 500;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-        nav a:hover {
-            color: #00ffff;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
-        }
+<script>
+        window.addEventListener('load', () => {
+            const canvas = document.getElementById('ai-canvas');
+            const ctx = canvas.getContext('2d');
+            const headerArea = document.getElementById('header-area');
 
-        .container { padding: 50px 20px; max-width: 800px; margin: auto; }
-        
-        h2 { color: #1a2a6c; border-left: 4px solid #00ffff; padding-left: 10px; }
-    </style>
-</head>
-<body>
+            let particles = [];
+            const particleCount = 45;
 
-    <header id="header-area">
-        <!-- Interactive AI Background Canvas -->
-        <canvas id="ai-canvas"></canvas>
-        <h1>AI Horizon</h1>
-        <p>Exploring the Future</p>
-    </header>
-
-    <!-- Navigation Menu connecting your pages -->
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="about .html">About</a>
-        <a href="deepfakes.html">Deepfakes</a>
-        <a href="healthcare.html">Healthcare</a>
-        <a href="jobs.html">Jobs</a>
-        <a href="privacy.html">Privacy</a>
-    </nav>
-
-    <div class="container">
-        <h2>Welcome to AI Horizon</h2>
-        <p>This is a dedicated space where I explore the rapidly evolving world of Artificial Intelligence. From machine learning breakthroughs to the ethical implications of future technology, my goal is to share clear, insightful content about how AI is shaping our lives.</p>
-        <p>Stay tuned as I continue to document my journey and share my latest projects and ideas in this exciting field.</p>
-    </div>
-
-    <!-- AI Particles JavaScript Effect -->
-    <script>
-        const canvas = document.getElementById('ai-canvas');
-        const ctx = canvas.getContext('2d');
-        const headerArea = document.getElementById('header-area');
-
-        let particles = [];
-        const particleCount = 45;
-
-        function resizeCanvas() {
-            canvas.width = headerArea.offsetWidth;
-            canvas.height = headerArea.offsetHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.speedX = (Math.random() - 0.5) * 0.8;
-                this.speedY = (Math.random() - 0.5) * 0.8;
-                this.radius = Math.random() * 2 + 1;
+            function resizeCanvas() {
+                // Uses header size, falls back to outer bounding box if client dimensions are zero
+                canvas.width = headerArea.clientWidth || headerArea.offsetWidth || window.innerWidth;
+                canvas.height = headerArea.clientHeight || headerArea.offsetHeight || 180; 
             }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(0, 255, 255, 0.7)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function init() {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                
-                // Draw neural connection lines between nearby dots
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 80) {
-                        ctx.strokeStyle = `rgba(0, 255, 255, ${1 - distance / 80 - 0.3})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                init(); // Reinitialize particle positions to match the new container size
+            });
+            
+            resizeCanvas();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.speedX = (Math.random() - 0.5) * 0.8;
+                    this.speedY = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+                draw() {
+                    ctx.fillStyle = 'rgba(0, 255, 255, 0.7)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
                 }
             }
-            requestAnimationFrame(animate);
-        }
 
-        init();
-        animate();
+            function init() {
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                    
+                    // Draw neural connection lines between nearby dots
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 80) {
+                            ctx.strokeStyle = `rgba(0, 255, 255, ${1 - distance / 80 - 0.3})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+            init();
+            animate();
+        });
     </script>
-
-</body>
-</html>
