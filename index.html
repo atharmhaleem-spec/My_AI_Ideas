@@ -31,7 +31,6 @@
         }
 
         function resizeCanvas() {
-            // Uses header size, falls back to outer bounding box if client dimensions are zero
             canvas.width = headerArea.clientWidth || headerArea.offsetWidth || window.innerWidth;
             canvas.height = headerArea.clientHeight || headerArea.offsetHeight || 180; 
         }
@@ -50,7 +49,6 @@
                 particles[i].update();
                 particles[i].draw();
                 
-                // Draw neural connection lines between nearby dots
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
@@ -69,13 +67,11 @@
             requestAnimationFrame(animate);
         }
 
-        // Set up the window resize listener safely now that init() exists
         window.addEventListener('resize', () => {
             resizeCanvas();
             init(); 
         });
         
-        // Run setup functions in order
         resizeCanvas();
         init();
         animate();
