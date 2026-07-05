@@ -9,8 +9,12 @@ window.addEventListener('load', function() {
     var particleCount = 45;
 
     function Particle() {
-        this.x = Math.random() * (canvas.width || window.innerWidth);
-        this.y = Math.random() * (canvas.height || 180);
+        // Fallback to window dimensions if canvas isn't fully initialized yet
+        var maxW = canvas.width > 10 ? canvas.width : window.innerWidth;
+        var maxH = canvas.height > 10 ? canvas.height : 180;
+        
+        this.x = Math.random() * maxW;
+        this.y = Math.random() * maxH;
         this.speedX = (Math.random() - 0.5) * 0.8;
         this.speedY = (Math.random() - 0.5) * 0.8;
         this.radius = Math.random() * 2 + 1;
@@ -19,8 +23,12 @@ window.addEventListener('load', function() {
     Particle.prototype.update = function() {
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        
+        // Prevent particles from getting trapped if canvas boundaries collapse/shift
+        if (this.x < 0) { this.x = 0; this.speedX *= -1; }
+        if (this.x > canvas.width) { this.x = canvas.width; this.speedX *= -1; }
+        if (this.y < 0) { this.y = 0; this.speedY *= -1; }
+        if (this.y > canvas.height) { this.y = canvas.height; this.speedY *= -1; }
     };
 
     Particle.prototype.draw = function() {
@@ -31,8 +39,12 @@ window.addEventListener('load', function() {
     };
 
     function resizeCanvas() {
-        canvas.width = headerArea.clientWidth || headerArea.offsetWidth || window.innerWidth;
-        canvas.height = headerArea.clientHeight || headerArea.offsetHeight || 180;
+        // Grab dimensions with aggressive fallbacks to prevent 0px dimensions
+        var targetW = headerArea.clientWidth || headerArea.offsetWidth || window.innerWidth;
+        var targetH = headerArea.clientHeight || headerArea.offsetHeight || 180;
+        
+        canvas.width = targetW > 0 ? targetW : window.innerWidth;
+        canvas.height = targetH > 0 ? targetH : 180;
     }
 
     function init() {
@@ -43,34 +55,52 @@ window.addEventListener('load', function() {
     }
 
     function animate() {
+        // If canvas has no size, skip rendering this frame to prevent errors
+        if (canvas.width === 0 || canvas.height === 0) {
+            requestAnimationFrame(animate);
+            return;
+        }
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
         for (var i = 0; i < particles.length; i++) {
             particles[i].update();
             particles[i].draw();
+            
             for (var j = i + 1; j < particles.length; j++) {
                 var dx = particles[i].x - particles[j].x;
                 var dy = particles[i].y - particles[j].y;
                 var distance = Math.sqrt(dx * dx + dy * dy);
+                
                 if (distance < 80) {
-                    ctx.strokeStyle = 'rgba(0, 255, 255, ' + (1 - distance / 80 - 0.3) + ')';
-                    ctx.lineWidth = 0.5;
-                    ctx.beginPath();
-                    ctx.moveTo(particles[i].x, particles[i].y);
-                    ctx.lineTo(particles[j].x, particles[j].y);
-                    ctx.stroke();
+                    var alpha = 1 - (distance / 80) - 0.3;
+                    if (alpha > 0) {
+                        ctx.strokeStyle = 'rgba(0, 255, 255, ' + alpha + ')';
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
                 }
             }
         }
         requestAnimationFrame(animate);
     }
 
+    // Debounce resize slightly or run standard listener
     window.addEventListener('resize', function() {
         resizeCanvas();
         init();
     });
 
+    // Run a tiny delayed backup check just in case CSS styles loaded slowly
     resizeCanvas();
     init();
     animate();
+    
+    setTimeout(function() {
+        resizeCanvas();
+    }, 100);
 });
 </script>
