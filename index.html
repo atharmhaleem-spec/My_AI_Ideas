@@ -1,79 +1,76 @@
 <script>
-    window.addEventListener('load', () => {
-        const canvas = document.getElementById('ai-canvas');
-        const ctx = canvas.getContext('2d');
-        const headerArea = document.getElementById('header-area');
+window.addEventListener('load', function() {
+    var canvas = document.getElementById('ai-canvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var headerArea = document.getElementById('header-area') || document.body;
 
-        let particles = [];
-        const particleCount = 45;
+    var particles = [];
+    var particleCount = 45;
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.speedX = (Math.random() - 0.5) * 0.8;
-                this.speedY = (Math.random() - 0.5) * 0.8;
-                this.radius = Math.random() * 2 + 1;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
+    function Particle() {
+        this.x = Math.random() * (canvas.width || window.innerWidth);
+        this.y = Math.random() * (canvas.height || 180);
+        this.speedX = (Math.random() - 0.5) * 0.8;
+        this.speedY = (Math.random() - 0.5) * 0.8;
+        this.radius = Math.random() * 2 + 1;
+    }
 
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(0, 255, 255, 0.7)';
-                ctx.beginPath();
-                ctx.arc(this.x,  this.y, this.radius, 0, Math.PI * 2);
-                ctx.fill();
-            }
+    Particle.prototype.update = function() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    };
+
+    Particle.prototype.draw = function() {
+        ctx.fillStyle = 'rgba(0, 255, 255, 0.7)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+    };
+
+    function resizeCanvas() {
+        canvas.width = headerArea.clientWidth || headerArea.offsetWidth || window.innerWidth;
+        canvas.height = headerArea.clientHeight || headerArea.offsetHeight || 180;
+    }
+
+    function init() {
+        particles = [];
+        for (var i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
         }
+    }
 
-        function resizeCanvas() {
-            canvas.width = headerArea.clientWidth || headerArea.offsetWidth || window.innerWidth;
-            canvas.height = headerArea.clientHeight || headerArea.offsetHeight || 180; 
-        }
-
-        function init() {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 80) {
-                        ctx.strokeStyle = `rgba(0, 255, 255, ${1 - distance / 80 - 0.3})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+            for (var j = i + 1; j < particles.length; j++) {
+                var dx = particles[i].x - particles[j].x;
+                var dy = particles[i].y - particles[j].y;
+                var distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 80) {
+                    ctx.strokeStyle = 'rgba(0, 255, 255, ' + (1 - distance / 80 - 0.3) + ')';
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
                 }
             }
-            requestAnimationFrame(animate);
         }
+        requestAnimationFrame(animate);
+    }
 
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            init(); 
-        });
-        
+    window.addEventListener('resize', function() {
         resizeCanvas();
         init();
-        animate();
     });
+
+    resizeCanvas();
+    init();
+    animate();
+});
 </script>
